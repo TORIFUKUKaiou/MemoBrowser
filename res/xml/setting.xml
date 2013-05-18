@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <EditTextPreference
+        android:key="home_url"
+        android:title="@string/setting_home_url"
+        android:defaultValue="@string/home_url_default"/>
+    <CheckBoxPreference
+        android:key="enable_java_script"
+        android:defaultValue="true"
+        android:title="@string/setting_enable_javascript"/>
+    <Preference android:selectable="false" android:layout="@layout/ad_layout" />
+    
+</PreferenceScreen>

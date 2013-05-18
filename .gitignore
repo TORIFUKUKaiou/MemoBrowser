@@ -1,0 +1,8 @@
+/gen
+/bin
+/doc
+GoogleAdMobAdsSdk*
+*.apk
+/release
+.DS_Store
+/screenshot
