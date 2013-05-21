@@ -51,6 +51,7 @@
                 android:layout_width="0.0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1.0"
+                android:inputType="text"
                 android:imeOptions="actionDone"
                 android:hint="@string/input_hint"
                 android:ems="10" >
