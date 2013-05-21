@@ -139,10 +139,10 @@ public class MainActivity extends Activity {
 		if (mMyBrowser != null) {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {
 				keyHandled = mMyBrowser.back();
-			}
-			if (!keyHandled && (keyCode == KeyEvent.KEYCODE_BACK)) {
-				finishConf();
-				return true;
+				if (!keyHandled) {
+					finishConf();
+					keyHandled = true;
+				}
 			}
 		}
 		TorifukuLog.d("keyHandled: " + keyHandled);
