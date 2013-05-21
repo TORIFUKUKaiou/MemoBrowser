@@ -318,8 +318,25 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 				return CaptureTaskResult.NoSdcard;
 			}
 			
+			Bitmap.Config config = Bitmap.Config.RGB_565;
+			SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(TorifukuBrowser.this.mContext);
+			int quality = Integer.parseInt(sharedPref.getString("capture_quality", "1"));
+			switch (quality) {
+			case 0:
+				config = Bitmap.Config.ARGB_8888;
+				break;
+			case 2:
+				config = Bitmap.Config.ALPHA_8;
+				break;
+			case 1:
+			default:
+				break;
+			}
 			Picture picture = TorifukuBrowser.this.mWebView.capturePicture();
-			Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), Bitmap.Config.RGB_565);
+			Bitmap bitmap = Bitmap.createBitmap(picture.getWidth(), picture.getHeight(), config);
+			if (bitmap == null) {
+				return CaptureTaskResult.Failed;
+			}
 				
 			Canvas canvas = new Canvas(bitmap);
 			picture.draw(canvas);
@@ -331,6 +348,10 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 					bitmap,
 					TorifukuBrowser.this.mWebView.getTitle() + "_" + System.currentTimeMillis(),
 					"");
+			bitmap.recycle();
+			if (url == null) {
+				return CaptureTaskResult.Failed;
+			}
 			
 			
 			Cursor c = MediaStore.Images.Media.query(cr, Uri.parse(url), null);

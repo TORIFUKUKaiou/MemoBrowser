@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="capture_qualitys">
+        <item >High</item>
+        <item >Normal</item>
+        <item >Low</item>
+    </string-array>
+    <string-array name="capture_qualitys_values">
+        <item >"0"</item>
+        <item >"1"</item>
+        <item >"2"</item>
+    </string-array>
+    
+</resources>

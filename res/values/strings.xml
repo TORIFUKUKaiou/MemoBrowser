@@ -29,6 +29,7 @@
 
     <string name="setting_home_url">HOME URL</string>
     <string name="setting_enable_javascript">Enable JavaScript</string>
+    <string name="setting_capture_quality">Capture Quality</string>
     
     <string name="byebye_msg_1">God bless you.</string>
     <string name="byebye_msg_2">Good luck!</string>

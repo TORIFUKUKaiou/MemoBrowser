@@ -8,6 +8,12 @@
         android:key="enable_java_script"
         android:defaultValue="true"
         android:title="@string/setting_enable_javascript"/>
+    <ListPreference
+        android:key="capture_quality"
+        android:title="@string/setting_capture_quality"
+        android:entries="@array/capture_qualitys"
+        android:entryValues="@array/capture_qualitys_values"
+        android:defaultValue="1" />
     <Preference android:selectable="false" android:layout="@layout/ad_layout" />
-    
+
 </PreferenceScreen>
