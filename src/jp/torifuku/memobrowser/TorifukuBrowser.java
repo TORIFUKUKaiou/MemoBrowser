@@ -360,6 +360,7 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 				c.moveToFirst();
 				int index = c.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
 				mFilePath = c.getString(index);
+				c.close();
 			} else {
 				mFilePath = url;
 			}
