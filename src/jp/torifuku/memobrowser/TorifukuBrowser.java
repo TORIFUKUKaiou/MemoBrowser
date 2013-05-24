@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 /**
  * TorifukuBrowser
@@ -261,7 +263,29 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 		return url;
 	}
 	
-	
+	/**
+	 * viewImage
+	 * @param uri
+	 */
+	private void viewImage(String uri) {
+		TorifukuLog.methodIn();
+		if (uri == null) {
+			Toast.makeText(mContext, R.string.cannot_view, Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(uri));
+		PackageManager pm = mContext.getPackageManager();
+		if (pm.queryIntentActivities(intent, 0).isEmpty()) {
+			Toast.makeText(mContext, R.string.cannot_view, Toast.LENGTH_LONG).show();
+			return;
+		}
+		
+		mContext.startActivity(intent);
+		
+		TorifukuLog.methodOut();
+	}
 	
 	/**
 	 * CaptureTaskResult
@@ -282,6 +306,7 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 	private class CaptureTask extends AsyncTask<Void, Void, CaptureTaskResult> {
 		private ProgressDialog mProgressDialog = null;
 		private String mFilePath = null;
+		private String mUri = null;
 		private CaptureListener mCaptureListener = null;
 		
 		private CaptureTask(CaptureListener l) {
@@ -343,18 +368,18 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 
 			
 			ContentResolver cr = TorifukuBrowser.this.mContext.getContentResolver();
-			String url = MediaStore.Images.Media.insertImage(
+			mUri = MediaStore.Images.Media.insertImage(
 					cr,
 					bitmap,
 					TorifukuBrowser.this.mWebView.getTitle() + "_" + System.currentTimeMillis(),
 					"");
 			bitmap.recycle();
-			if (url == null) {
+			if (mUri == null) {
 				return CaptureTaskResult.Failed;
 			}
 			
 			
-			Cursor c = MediaStore.Images.Media.query(cr, Uri.parse(url), null);
+			Cursor c = MediaStore.Images.Media.query(cr, Uri.parse(mUri), null);
 			if (c != null) {
 				TorifukuLog.d("count: " + c.getCount());
 				c.moveToFirst();
@@ -362,7 +387,7 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 				mFilePath = c.getString(index);
 				c.close();
 			} else {
-				mFilePath = url;
+				mFilePath = mUri;
 			}
 			
 			TorifukuLog.methodOut();
@@ -403,7 +428,22 @@ public class TorifukuBrowser implements TorifukuBrowserInterface {
 						CaptureTask.this.mCaptureListener.complete();
 					}
 				}});
-			builder.show();
+			if (result == CaptureTaskResult.Success) {
+				builder.setNeutralButton(R.string.view, new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						TorifukuLog.methodIn();
+						if (CaptureTask.this.mCaptureListener != null) {
+							CaptureTask.this.mCaptureListener.complete();
+						}
+						TorifukuBrowser.this.viewImage(CaptureTask.this.mUri);
+						
+						TorifukuLog.methodOut();
+				}});
+			}
+			AlertDialog dialog = builder.create();
+			dialog.setCanceledOnTouchOutside(false);
+			dialog.show();
 			
 			
 			

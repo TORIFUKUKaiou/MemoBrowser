@@ -26,6 +26,8 @@
     <string name="capture_failed">Sorry, failed</string>
     <string name="capture_failed_nosdcard">No sdcard</string>
     <string name="show_ad">advertising</string>
+    <string name="view">View</string>
+    <string name="cannot_view">Sorry, failed</string>
 
     <string name="setting_home_url">HOME URL</string>
     <string name="setting_enable_javascript">Enable JavaScript</string>
