@@ -35,7 +35,7 @@
         <activity android:name=".BookmarkListActivity" />
         <activity android:name=".FinishActivity" />
         <activity android:name=".MySettingActivity" />
-        <activity android:name=".AdActivity" />
+        <activity android:name=".AdActivity" android:label="@string/prefs_open_source" />
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
     </application>

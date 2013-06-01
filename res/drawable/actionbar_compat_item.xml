@@ -1,11 +1,4 @@
-<resources>
-
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="editTextHeight">68.6dp</dimen>
-    
-  <!--
+<!--
   Copyright 2011 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,8 +13,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-    <dimen name="actionbar_compat_height">48dp</dimen>
-    <dimen name="actionbar_compat_button_width">48dp</dimen>
-    <dimen name="actionbar_compat_button_home_width">56dp</dimen>
 
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/actionbar_compat_item_pressed"
+        android:state_pressed="true" />
+    <item android:drawable="@drawable/actionbar_compat_item_focused"
+        android:state_focused="true" />
+    <item android:drawable="@android:color/transparent" />
+</selector>

@@ -1,5 +1,7 @@
 package jp.torifuku.memobrowser;
 
+import com.example.android.actionbarcompat.ActionBarActivity;
+
 import jp.torifuku.util.torifukuutility.log.TorifukuLog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,14 +34,13 @@ import android.widget.Toast;
  * @author torifuku kaiou
  *
  */
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 	static private final int BOOKMARK_REQUEST_CODE = 1;
 	static private final int SETTING_REQUEST_CODE = 10;
 	
 	private TorifukuBrowserInterface mMyBrowser;
 	private EditText mEditText = null;
 	private LinearLayout mEditTextLinearLayout = null;
-	private LinearLayout mOperationBar = null;
 	private ImageView mSurfingImageView = null;
 	
 	/* (non-Javadoc)
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		
 		TorifukuLog.methodOut();
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 	
 	/* (non-Javadoc)
@@ -100,6 +101,20 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		TorifukuLog.methodIn();
 		switch (item.getItemId()) {
+		case R.id.action_back:
+			if (mMyBrowser != null) {
+				mMyBrowser.back();
+			}
+			break;
+		case R.id.action_bookmark:
+			if (mMyBrowser != null) {
+				Intent intent = mMyBrowser.bookmark();
+				super.startActivityForResult(intent, MainActivity.BOOKMARK_REQUEST_CODE);
+			}
+			break;
+		case R.id.action_memo:
+			memo();
+			break;
 		case R.id.action_close:
 			super.finish();
 			break;
@@ -212,41 +227,6 @@ public class MainActivity extends Activity {
 			mMyBrowser.jump(url);
 		}
 		
-		// back button
-		Button backButton = (Button) super.findViewById(R.id.back_button);
-		backButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				TorifukuLog.methodIn();
-				if (MainActivity.this.mMyBrowser != null) {
-					MainActivity.this.mMyBrowser.back();
-				}
-				TorifukuLog.methodOut();
-			}});
-		
-		// bookmark button
-		Button bookmarkButton = (Button) super.findViewById(R.id.bookmark_button);
-		bookmarkButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				TorifukuLog.methodIn();
-				if (MainActivity.this.mMyBrowser != null) {
-					Intent intent = MainActivity.this.mMyBrowser.bookmark();
-					MainActivity.this.startActivityForResult(intent, MainActivity.BOOKMARK_REQUEST_CODE);
-				}
-				TorifukuLog.methodOut();
-			}});
-		
-		// Memo button
-		Button memoButton = (Button) super.findViewById(R.id.memo_button);
-		memoButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				TorifukuLog.methodIn();
-				MainActivity.this.memo();
-				TorifukuLog.methodOut();
-			}});
-		
 		
 		// EditText
 		mEditText = (EditText) super.findViewById(R.id.editText);
@@ -267,7 +247,6 @@ public class MainActivity extends Activity {
 		
 		// LinearLayout
 		mEditTextLinearLayout = (LinearLayout) super.findViewById(R.id.editTextLinearLayout);
-		mOperationBar = (LinearLayout) super.findViewById(R.id.operationbarLinearLayout);
 		
 		// Done Button
 		Button doneButton = (Button) super.findViewById(R.id.done_button);
@@ -327,9 +306,6 @@ public class MainActivity extends Activity {
 		if (mEditTextLinearLayout == null) {
 			return;
 		}
-		if (mOperationBar == null) {
-			return;
-		}
 		
 		// show edit text
 		int visibility = mEditTextLinearLayout.getVisibility();
@@ -339,8 +315,6 @@ public class MainActivity extends Activity {
 			mEditTextLinearLayout.setAnimation(animation);
 		}
 		
-		Animation animation = AnimationUtils.loadAnimation(this, R.anim.right2left);
-		mOperationBar.setAnimation(animation);
 		Animation surfingAnimation = AnimationUtils.loadAnimation(this, R.anim.surfing);
 		surfingAnimation.setDuration(1800);
 		mSurfingImageView.setVisibility(View.VISIBLE);
@@ -350,7 +324,6 @@ public class MainActivity extends Activity {
 			public void run() {
 				TorifukuLog.methodIn();
 				
-				MainActivity.this.mOperationBar.setVisibility(View.GONE);
 				MainActivity.this.mSurfingImageView.setVisibility(View.GONE);
 				
 				TorifukuLog.methodOut();
@@ -433,9 +406,6 @@ public class MainActivity extends Activity {
 		if (mEditTextLinearLayout == null) {
 			return;
 		}
-		if (mOperationBar == null) {
-			return;
-		}
 		if (mEditText == null) {
 			return;
 		}
@@ -443,12 +413,7 @@ public class MainActivity extends Activity {
 		/** Close ime */
 		InputMethodManager imm = (InputMethodManager) super.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(mEditText.getWindowToken(), 0);
-		
-		/** show mOperationBar */
-		mOperationBar.setVisibility(View.VISIBLE);
-		Animation visible_animation = AnimationUtils.loadAnimation(this, R.anim.scale);
-		mOperationBar.setAnimation(visible_animation);
-		
+				
 		/** hide EditText LinearLayout */
 		Animation gone_animation = AnimationUtils.loadAnimation(this, R.anim.right2left);
 		mEditTextLinearLayout.setAnimation(gone_animation);

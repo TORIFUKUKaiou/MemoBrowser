@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    
+
     <style name="AppTheme" parent="android:style/Theme.Light">
         <item name="android:windowTitleSize">@dimen/actionbar_compat_height</item>
         <item name="android:windowTitleBackgroundStyle">@style/ActionBarCompat</item>

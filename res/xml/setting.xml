@@ -14,6 +14,11 @@
         android:entries="@array/capture_qualitys"
         android:entryValues="@array/capture_qualitys_values"
         android:defaultValue="1" />
+    <Preference android:title="@string/prefs_open_source" >
+        <intent
+            android:targetClass="jp.torifuku.memobrowser.AdActivity"
+            android:targetPackage="jp.torifuku.memobrowser" />
+    </Preference>
     <Preference android:selectable="false" android:layout="@layout/ad_layout" />
 
 </PreferenceScreen>

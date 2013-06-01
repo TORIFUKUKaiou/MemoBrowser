@@ -1,4 +1,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:id="@+id/action_back"
+        android:title="@string/back_button"
+        android:icon="@drawable/ic_menu_back"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+    
+    <item android:id="@+id/action_bookmark"
+        android:title="@string/bookmark_button"
+        android:icon="@drawable/ic_menu_star"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+ 
+    <item android:id="@+id/action_memo"
+        android:title="@string/memo_button"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+    
+    <item
+        android:id="@+id/action_capture"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="@string/capture_button"/>
 
     <item
         android:id="@+id/action_close"
@@ -13,13 +38,6 @@
         android:showAsAction="never"
         android:icon="@android:drawable/ic_menu_rotate"
         android:title="@string/reload_button"/>
-
-    <item
-        android:id="@+id/action_capture"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:icon="@android:drawable/ic_menu_camera"
-        android:title="@string/capture_button"/>
     
     <item
         android:id="@+id/action_home"

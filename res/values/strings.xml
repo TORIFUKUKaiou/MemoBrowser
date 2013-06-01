@@ -35,4 +35,7 @@
     
     <string name="byebye_msg_1">God bless you.</string>
     <string name="byebye_msg_2">Good luck!</string>
+    
+    <string name="prefs_open_source">NOTICE</string>
+    <string name="open_source_notice">MemoBrowser\n   Copyright 2013 torifuku kaiou\n\nThis product includes software developed at The Apache Software Foundation (http://www.apache.org/).\n\nPortions of this software were developed at The Android Open Source Project.\n\nThis software contains code derived from The Android Open Source Project.\n\nThe original software is available from\nhttp://developer.android.com/index.html\nhttp://source.android.com</string>
 </resources>

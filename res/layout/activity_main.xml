@@ -17,32 +17,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/operationbarLinearLayout"
-            android:gravity="center" >
-
-            <Button
-                android:id="@+id/back_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back_button" />
-            
-            <Button
-                android:id="@+id/bookmark_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bookmark_button" />
-            
-            <Button
-                android:id="@+id/memo_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/memo_button" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/editTextLinearLayout"
             android:visibility="gone" >
