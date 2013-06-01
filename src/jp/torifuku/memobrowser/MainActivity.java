@@ -38,10 +38,11 @@ public class MainActivity extends ActionBarActivity {
 	static private final int BOOKMARK_REQUEST_CODE = 1;
 	static private final int SETTING_REQUEST_CODE = 10;
 	
-	private TorifukuBrowserInterface mMyBrowser;
+	static TorifukuBrowserInterface sMyBrowser = null;
 	private EditText mEditText = null;
 	private LinearLayout mEditTextLinearLayout = null;
 	private ImageView mSurfingImageView = null;
+	private boolean mFinishUserWant = false;
 	
 	/* (non-Javadoc)
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -84,11 +85,14 @@ public class MainActivity extends ActionBarActivity {
 		} else {
 			msgId = R.string.byebye_msg_2;
 		}
-		Toast.makeText(this, msgId, Toast.LENGTH_LONG).show();
+		if (mFinishUserWant) {
+			Toast.makeText(this, msgId, Toast.LENGTH_LONG).show();
+		}
+		mFinishUserWant = false;
 		
 		super.onDestroy();
-		if (mMyBrowser != null) {
-			mMyBrowser.stop();
+		if (sMyBrowser != null) {
+			sMyBrowser.stop();
 		}
 		
 		TorifukuLog.methodOut();
@@ -102,13 +106,13 @@ public class MainActivity extends ActionBarActivity {
 		TorifukuLog.methodIn();
 		switch (item.getItemId()) {
 		case R.id.action_back:
-			if (mMyBrowser != null) {
-				mMyBrowser.back();
+			if (sMyBrowser != null) {
+				sMyBrowser.back();
 			}
 			break;
 		case R.id.action_bookmark:
-			if (mMyBrowser != null) {
-				Intent intent = mMyBrowser.bookmark();
+			if (sMyBrowser != null) {
+				Intent intent = sMyBrowser.bookmark();
 				super.startActivityForResult(intent, MainActivity.BOOKMARK_REQUEST_CODE);
 			}
 			break;
@@ -117,21 +121,22 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		case R.id.action_close:
 			super.finish();
+			mFinishUserWant = true;
 			break;
 		case R.id.action_settings:
-			if (mMyBrowser != null) {
-				Intent intent = mMyBrowser.setting();
+			if (sMyBrowser != null) {
+				Intent intent = sMyBrowser.setting();
 				super.startActivityForResult(intent, MainActivity.SETTING_REQUEST_CODE);
 			}
 			break;
 		case R.id.action_reload:
-			if (mMyBrowser != null) {
-				mMyBrowser.reload();
+			if (sMyBrowser != null) {
+				sMyBrowser.reload();
 			}
 			break;
 		case R.id.action_home:
-			if (mMyBrowser != null) {
-				mMyBrowser.home();
+			if (sMyBrowser != null) {
+				sMyBrowser.home();
 			}
 			break;
 		case R.id.action_capture:
@@ -151,9 +156,9 @@ public class MainActivity extends ActionBarActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		TorifukuLog.methodIn();
 		boolean keyHandled = false;
-		if (mMyBrowser != null) {
+		if (sMyBrowser != null) {
 			if (keyCode == KeyEvent.KEYCODE_BACK) {
-				keyHandled = mMyBrowser.back();
+				keyHandled = sMyBrowser.back();
 				if (!keyHandled) {
 					finishConf();
 					keyHandled = true;
@@ -183,12 +188,12 @@ public class MainActivity extends ActionBarActivity {
 		
 		if (requestCode == MainActivity.BOOKMARK_REQUEST_CODE) {
 			String url = data.getStringExtra("url");
-			if (mMyBrowser != null) {
-				mMyBrowser.jump(url);
+			if (sMyBrowser != null) {
+				sMyBrowser.jump(url);
 			}
 		} else if (requestCode == MainActivity.SETTING_REQUEST_CODE) {
-			if (mMyBrowser != null) {
-				mMyBrowser.setJavaScriptEnabled();
+			if (sMyBrowser != null) {
+				sMyBrowser.setJavaScriptEnabled();
 			}
 		}
 		
@@ -209,12 +214,12 @@ public class MainActivity extends ActionBarActivity {
 		
 		/** UI */
 		WebView webView = (WebView) super.findViewById(R.id.webView);
-		mMyBrowser = new TorifukuBrowser(webView);
+		sMyBrowser = new TorifukuBrowser(webView);
 		Intent intent = super.getIntent();
 		String url = null;
 		if (intent == null) {
 		} else {
-			if (intent.getAction().equals(Intent.ACTION_SEND)) {
+			if (Intent.ACTION_SEND.equals(intent.getAction())) {
 				Bundle extras = intent.getExtras();
 				if (extras != null) {
 					url = extras.getCharSequence(Intent.EXTRA_TEXT).toString();
@@ -222,9 +227,9 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		if (url == null) {
-			mMyBrowser.start();
+			sMyBrowser.start();
 		} else {
-			mMyBrowser.jump(url);
+			sMyBrowser.jump(url);
 		}
 		
 		
@@ -434,13 +439,13 @@ public class MainActivity extends ActionBarActivity {
 	private void capture() {
 		TorifukuLog.methodIn();
 		
-		if (mMyBrowser != null) {
+		if (sMyBrowser != null) {
 			mSurfingImageView.setVisibility(View.VISIBLE);
 			Animation animation = AnimationUtils.loadAnimation(this, R.anim.surfing);
 			mSurfingImageView.setAnimation(animation);
 			
 			final long now = System.currentTimeMillis();
-			mMyBrowser.capture(new TorifukuBrowserInterface.CaptureListener() {
+			sMyBrowser.capture(new TorifukuBrowserInterface.CaptureListener() {
 				/* (non-Javadoc)
 				 * @see jp.torifuku.memobrowser.TorifukuBrowserInterface.CaptureListener#complete()
 				 */
@@ -505,6 +510,7 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(DialogInterface arg0, int arg1) {
 				TorifukuLog.methodIn();
 				MainActivity.super.finish();
+				mFinishUserWant = true;
 				TorifukuLog.methodOut();
 			}});
 		builder.show();

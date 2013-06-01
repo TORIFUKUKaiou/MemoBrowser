@@ -2,12 +2,14 @@ package jp.torifuku.memobrowser;
 
 import jp.torifuku.util.torifukuutility.log.TorifukuLog;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.view.MenuItem;
 
 /**
  * MySettingActivity
@@ -86,9 +88,38 @@ public class MySettingActivity extends PreferenceActivity {
 						return true;
 					}
 				});
+		
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+			super.getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		super.setResult(Activity.RESULT_OK);
 
 		TorifukuLog.methodOut();
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		TorifukuLog.methodIn();
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setAction(Intent.ACTION_SEND);
+            if (MainActivity.sMyBrowser != null) {
+            	intent.putExtra(Intent.EXTRA_TEXT, MainActivity.sMyBrowser.getUrl());
+            }
+            super.startActivity(intent);
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		
+		TorifukuLog.methodOut();
+		return true;
 	}
 }

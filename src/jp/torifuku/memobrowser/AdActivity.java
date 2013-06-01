@@ -4,6 +4,7 @@ import jp.torifuku.util.torifukuutility.log.TorifukuLog;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +28,10 @@ public class AdActivity extends Activity {
 
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.activity_ad);
+		
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+			super.getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		Button button = (Button) super.findViewById(R.id.setting_button);
 		button.setOnClickListener(new OnClickListener() {
@@ -48,5 +53,30 @@ public class AdActivity extends Activity {
 		});
 
 		TorifukuLog.methodOut();
+	}
+	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		TorifukuLog.methodIn();
+		
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setAction(Intent.ACTION_SEND);
+            if (MainActivity.sMyBrowser != null) {
+            	intent.putExtra(Intent.EXTRA_TEXT, MainActivity.sMyBrowser.getUrl());
+            }
+            super.startActivity(intent);
+			break;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+		
+		TorifukuLog.methodOut();
+		return true;
 	}
 }
